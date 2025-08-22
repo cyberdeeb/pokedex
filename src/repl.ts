@@ -1,12 +1,9 @@
 import { createInterface } from 'readline';
 import { getCommands } from './get_commands.js';
+import { State } from './state.js';
 
-export function startREPL() {
-  const rl = createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: 'pokedex > ',
-  });
+export function startREPL(state: State) {
+  const { rl, commands } = state;
 
   rl.prompt();
 
@@ -18,15 +15,14 @@ export function startREPL() {
     }
 
     const commandName = words[0];
-    const commands = getCommands();
 
     if (commandName === 'exit') {
-      commands[commandName].callback(commands);
+      commands[commandName].callback(state);
     } else if (!(commandName in commands)) {
       console.log(`Unknown command: ${commandName}`);
       rl.prompt();
     } else {
-      commands[commandName].callback(commands);
+      commands[commandName].callback(state);
       rl.prompt();
     }
   });
