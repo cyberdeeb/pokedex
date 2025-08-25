@@ -1,25 +1,33 @@
 import { createInterface, type Interface } from 'readline';
 import { getCommands } from './get_commands.js';
+import { PokeAPI } from './pokeapi.js';
 
 export type CLICommand = {
   name: string;
   description: string;
-  callback: (state: State) => void;
+  callback: (state: State) => Promise<void>;
 };
 
 export type State = {
-  rl: Interface;
+  readline: Interface;
   commands: Record<string, CLICommand>;
+  pokeAPI: PokeAPI;
+  nextLocationsURL: string;
+  prevLocationsURL: string;
 };
 
-export function initState(): State {
+export function initState() {
   const rl = createInterface({
     input: process.stdin,
     output: process.stdout,
     prompt: 'pokedex > ',
   });
 
-  const commands = getCommands();
-
-  return { rl, commands };
+  return {
+    readline: rl,
+    commands: getCommands(),
+    pokeAPI: new PokeAPI(),
+    nextLocationsURL: '',
+    prevLocationsURL: '',
+  };
 }

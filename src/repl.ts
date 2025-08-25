@@ -1,29 +1,31 @@
-import { createInterface } from 'readline';
-import { getCommands } from './get_commands.js';
 import { State } from './state.js';
 
-export function startREPL(state: State) {
-  const { rl, commands } = state;
+export async function startREPL(state: State) {
+  const { readline, commands } = state;
 
-  rl.prompt();
+  readline.prompt();
 
-  rl.on('line', async (input) => {
+  readline.on('line', async (input) => {
     const words = cleanInput(input);
     if (words.length === 0) {
-      rl.prompt();
+      readline.prompt();
       return;
     }
 
     const commandName = words[0];
 
-    if (commandName === 'exit') {
-      commands[commandName].callback(state);
-    } else if (!(commandName in commands)) {
-      console.log(`Unknown command: ${commandName}`);
-      rl.prompt();
+    if (!(commandName in commands)) {
+      console.log(
+        `Unknown command: "${commandName}". Type "help" for a list of commands.`
+      );
+      readline.prompt();
     } else {
-      commands[commandName].callback(state);
-      rl.prompt();
+      try {
+        await commands[commandName].callback(state);
+      } catch (error) {
+        console.error(`Error executing command "${commandName}":`, error);
+      }
+      readline.prompt();
     }
   });
 }
