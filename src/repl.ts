@@ -13,6 +13,7 @@ export async function startREPL(state: State) {
     }
 
     const commandName = words[0];
+    const args = words.slice(1);
 
     if (!(commandName in commands)) {
       console.log(
@@ -21,7 +22,7 @@ export async function startREPL(state: State) {
       readline.prompt();
     } else {
       try {
-        await commands[commandName].callback(state);
+        await commands[commandName].callback(state, ...args);
       } catch (error) {
         console.error(`Error executing command "${commandName}":`, error);
       }

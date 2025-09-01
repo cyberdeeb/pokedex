@@ -1,4 +1,4 @@
-import { Cache } from './pokecache';
+import { Cache } from './pokecache.js';
 
 export class PokeAPI {
   private static readonly baseURL = 'https://pokeapi.co/api/v2';
@@ -32,12 +32,20 @@ export class PokeAPI {
   async fetchLocation(locationName: string): Promise<Location> {
     const locationURL = `${PokeAPI.baseURL}/location-area/${locationName}/`;
 
+    const cacheKey = locationURL;
+
+    const cached = this.cache.get<Location>(cacheKey);
+    if (cached) {
+      return cached;
+    }
+
     try {
       const response = await fetch(locationURL);
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
       const location: Location = await response.json();
+      this.cache.add(cacheKey, location);
       return location;
     } catch (error) {
       console.error('Error fetching location:', error);
