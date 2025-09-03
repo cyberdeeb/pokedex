@@ -68,7 +68,7 @@ export class PokeAPI {
       if (!response.ok) {
         throw new Error('HTTP error ' + response.status);
       }
-      const data: Pokemon = await response.json();
+      const data = await response.json();
 
       const pokemon: Pokemon = {
         id: data.id,
@@ -76,6 +76,24 @@ export class PokeAPI {
         base_experience: data.base_experience,
         height: data.height,
         weight: data.weight,
+        stats: {
+          hp: data.stats.find((s: any) => s.stat.name === 'hp')?.base_stat ?? 0,
+          attack:
+            data.stats.find((s: any) => s.stat.name === 'attack')?.base_stat ??
+            0,
+          defense:
+            data.stats.find((s: any) => s.stat.name === 'defense')?.base_stat ??
+            0,
+          special_attack:
+            data.stats.find((s: any) => s.stat.name === 'special-attack')
+              ?.base_stat ?? 0,
+          special_defense:
+            data.stats.find((s: any) => s.stat.name === 'special-defense')
+              ?.base_stat ?? 0,
+          speed:
+            data.stats.find((s: any) => s.stat.name === 'speed')?.base_stat ??
+            0,
+        },
         types: data.types.map((t: any) => t.type.name),
         abilities: data.abilities.map((a: any) => a.ability.name),
         caught: false, // default
@@ -99,6 +117,14 @@ export type Pokemon = {
   base_experience: number;
   height: number;
   weight: number;
+  stats: {
+    hp: number;
+    attack: number;
+    defense: number;
+    special_attack: number;
+    special_defense: number;
+    speed: number;
+  };
   types: string[];
   abilities: string[];
   caught: boolean;

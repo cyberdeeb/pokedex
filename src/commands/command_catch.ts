@@ -1,6 +1,6 @@
 import { State } from '../state.js';
 import terminalImage from 'terminal-image';
-
+import { displayPokemonInfo } from '../helpers/helpers.js';
 export async function commandCatch(state: State, pokemonName: string) {
   const pokedex = state.pokedex;
 
@@ -45,10 +45,7 @@ export async function commandCatch(state: State, pokemonName: string) {
       console.log('(No sprite available)');
     }
 
-    for (const [key, value] of Object.entries(caughtPokemon)) {
-      if (key == 'sprites') continue;
-      console.log(`  ${key}: ${value}`);
-    }
+    displayPokemonInfo(caughtPokemon);
   } else {
     console.log(`Oh no! ${pokemonName} broke free!`);
   }
