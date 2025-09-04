@@ -2,8 +2,10 @@ function titleCase(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export function displayPokemonInfo(pokemon: any) {
-  console.log(`\n🎉 ${pokemon.name} has been added to your pokedex! 🎉\n`);
+export function displayPokemonInfo(pokemon: any, inspect: boolean = false) {
+  if (!inspect) {
+    console.log(`\n🎉 ${pokemon.name} has been added to your pokedex! 🎉\n`);
+  }
   console.log(`\n📸 ${pokemon.spriteUrl}\n`);
   console.log(`\n📝 Pokemon Details:`);
   console.log(`  - ID: ${pokemon.id}`);

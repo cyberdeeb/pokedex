@@ -1,6 +1,7 @@
 import { State } from '../state.js';
 import terminalImage from 'terminal-image';
 import { displayPokemonInfo } from '../helpers/helper_displayPokemon.js';
+
 export async function commandCatch(state: State, pokemonName: string) {
   const pokedex = state.pokedex;
 
