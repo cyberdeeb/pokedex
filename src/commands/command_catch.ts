@@ -1,6 +1,6 @@
 import { State } from '../state.js';
 import terminalImage from 'terminal-image';
-import { displayPokemonInfo } from '../helpers/helpers.js';
+import { displayPokemonInfo } from '../helpers/helper_displayPokemon.js';
 export async function commandCatch(state: State, pokemonName: string) {
   const pokedex = state.pokedex;
 
@@ -23,30 +23,10 @@ export async function commandCatch(state: State, pokemonName: string) {
     let caughtPokemon = { ...pokemonData, caught: true };
     pokedex[pokemonName] = caughtPokemon;
 
-    console.log(`✨ You caught ${pokemonName}! ✨`);
-
-    const spriteUrl =
-      (caughtPokemon as any)?.sprites?.front_default ??
-      (caughtPokemon as any)?.spriteUrl ??
-      null;
-
-    if (spriteUrl) {
-      try {
-        const resp = await fetch(spriteUrl);
-        const buf = Buffer.from(await resp.arrayBuffer());
-        console.log(
-          await terminalImage.buffer(buf, { preserveAspectRatio: true })
-        );
-      } catch {
-        console.log('(Could not render sprite, showing URL instead)');
-        console.log(spriteUrl);
-      }
-    } else {
-      console.log('(No sprite available)');
-    }
+    console.log(`\n✨ You caught ${pokemonName}! ✨`);
 
     displayPokemonInfo(caughtPokemon);
   } else {
-    console.log(`Oh no! ${pokemonName} broke free!`);
+    console.log(`Oh no! ${pokemonName} broke free!\n`);
   }
 }

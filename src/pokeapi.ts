@@ -97,9 +97,10 @@ export class PokeAPI {
         types: data.types.map((t: any) => t.type.name),
         abilities: data.abilities.map((a: any) => a.ability.name),
         caught: false, // default
-        sprites: {
-          front_default: data.sprites.front_default,
-        },
+        spriteUrl:
+          data.sprites.other?.['official-artwork']?.front_default ||
+          data.sprites.front_default ||
+          null,
       };
 
       this.cache.add(cacheKey, pokemon);
@@ -128,9 +129,7 @@ export type Pokemon = {
   types: string[];
   abilities: string[];
   caught: boolean;
-  sprites: {
-    front_default: string | null;
-  };
+  spriteUrl: string | null;
 };
 
 export type ShallowLocations = {
